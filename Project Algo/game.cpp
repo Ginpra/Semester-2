@@ -20,9 +20,6 @@ struct Node {
 
 Node* head = nullptr;
 
-// -----------------------------------------
-// Baca file dan bangun linked list
-// -----------------------------------------
 void bacafile() {
     FILE* file = fopen("data_game.txt", "r");
     if (!file) {
@@ -50,13 +47,9 @@ void bacafile() {
             baru->prev = bantu;
         }
     }
-
     fclose(file);
 }
 
-// -----------------------------------------
-// Simpan satu Game baru (append ke file)
-// -----------------------------------------
 void simpanFile(const Game& g) {
     FILE* file = fopen("data_game.txt", "a");
     if (!file) {
@@ -68,9 +61,6 @@ void simpanFile(const Game& g) {
     fclose(file);
 }
 
-// -----------------------------------------
-// Tampilkan seluruh data (maju dari head)
-// -----------------------------------------
 void tampilGame() {
     if (!head) {
         cout << "\nData kosong!\n";
@@ -97,13 +87,11 @@ void tampilGame() {
     }
 }
 
-// -----------------------------------------
-// Input beberapa Game baru
-// -----------------------------------------
 void inputGame() {
     int input;
-    cout << "Masukkan jumlah data game : ";
+    cout << "Masukkan jumlah game : ";
     cin >> input;
+
     for (int i = 0; i < input; i++) {
         Game g;
         cout << "\n=====================\n";
@@ -142,23 +130,19 @@ void inputGame() {
             bantu->next = baru;
             baru->prev = bantu;
         }
-
         simpanFile(g);
         cout << "Data berhasil ditambahkan!\n";
     }
 }
 
-// -----------------------------------------
-// Search Game berdasarkan ID
-// -----------------------------------------
-void searchData() {
+void searchGame() {
     if (!head) {
         cout << "\nData kosong!\n";
         return;
     }
 
     int ID;
-    cout << "\nMasukkan ID yang dicari: ";
+    cout << "\nMasukkan ID yang dicari : ";
     cin >> ID;
 
     Node* bantu = head;
@@ -177,17 +161,14 @@ void searchData() {
     cout << "\nData dengan ID " << ID << " tidak ditemukan.\n";
 }
 
-// -----------------------------------------
-// Edit Game berdasarkan ID
-// -----------------------------------------
-void editData() {
+void editGame() {
     if (!head) {
         cout << "\nData kosong!\n";
         return;
     }
 
     int ID;
-    cout << "\nMasukkan ID game yang ingin diedit: ";
+    cout << "\nMasukkan ID game yang ingin diedit : ";
     cin >> ID;
     cin.ignore();
 
@@ -206,10 +187,12 @@ void editData() {
 
             // simpan ulang semua ke file
             FILE* file = fopen("data_game.txt", "w");
+
             if (!file) {
                 cout << "\nGagal membuka file untuk menyimpan perubahan!\n";
                 return;
             }
+
             Node* temp = head;
             while (temp) {
                 fprintf(file, "%d\n%s\n%f\n%d\n%s\n",
@@ -219,20 +202,15 @@ void editData() {
                 temp = temp->next;
             }
             fclose(file);
-
             cout << "Data berhasil diperbarui!\n";
             return;
         }
         bantu = bantu->next;
     }
-
     cout << "\nData dengan ID " << ID << " tidak ditemukan.\n";
 }
 
-// -----------------------------------------
-// Hapus Game berdasarkan ID
-// -----------------------------------------
-void hapusData() {
+void hapusGame() {
     if (!head) {
         cout << "\nData kosong!\n";
         return;
@@ -246,25 +224,32 @@ void hapusData() {
     while (bantu && bantu->data.id != ID) {
         bantu = bantu->next;
     }
+
     if (!bantu) {
         cout << "\nData dengan ID " << ID << " tidak ditemukan.\n";
         return;
     }
 
-    // relink
-    if (bantu->prev)       bantu->prev->next = bantu->next;
-    else                   head = bantu->next;
-    if (bantu->next)       bantu->next->prev = bantu->prev;
-
+    // relink / sambungkan node
+    if (bantu->prev) {
+        bantu->prev->next = bantu->next;
+    } else {
+        head = bantu->next;
+    }
+    if (bantu->next) {
+        bantu->next->prev = bantu->prev;
+    }
     delete bantu;
     cout << "\nData berhasil dihapus!\n";
 
     // simpan ulang semua ke file
     FILE* file = fopen("data_game.txt", "w");
+
     if (!file) {
         cout << "Gagal membuka file untuk menyimpan perubahan!\n";
         return;
     }
+
     Node* temp = head;
     while (temp) {
         fprintf(file, "%d\n%s\n%f\n%d\n%s\n",
@@ -276,9 +261,6 @@ void hapusData() {
     fclose(file);
 }
 
-// -----------------------------------------
-// Menu utama
-// -----------------------------------------
 void menuUtama() {
     int menu;
     do {
@@ -295,9 +277,9 @@ void menuUtama() {
         switch (menu) {
             case 1: inputGame();   break;
             case 2: tampilGame();  break;
-            case 3: searchData();  break;
-            case 4: editData();    break;
-            case 5: hapusData();   break;
+            case 3: searchGame();  break;
+            case 4: editGame();    break;
+            case 5: hapusGame();   break;
             case 6: cout << "\nTerima kasih!\n"; return;
             default: cout << "\nPilihan tidak tersedia!\n";
         }
