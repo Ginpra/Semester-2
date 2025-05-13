@@ -97,7 +97,7 @@ void inputGame() {
         cout << "\n=====================\n";
         cout << "Data ke- " << (i + 1) << "\n";
 
-        cout << "Masukkan ID: ";
+        cout << "Masukkan ID : ";
         cin >> g.id;
         cin.ignore();
 
@@ -148,7 +148,7 @@ void searchGame() {
     Node* bantu = head;
     while (bantu) {
         if (bantu->data.id == ID) {
-            cout << "\nData ditemukan:\n";
+            cout << "\nData ditemukan :\n";
             cout << "ID     : " << bantu->data.id << "\n";
             cout << "Nama   : " << bantu->data.nama << "\n";
             cout << "Harga  : " << bantu->data.harga << "\n";
@@ -158,7 +158,7 @@ void searchGame() {
         }
         bantu = bantu->next;
     }
-    cout << "\nData dengan ID " << ID << " tidak ditemukan.\n";
+    cout << "\nData dengan ID : " << ID << " tidak ditemukan.\n";
 }
 
 void editGame() {
@@ -175,14 +175,14 @@ void editGame() {
     Node* bantu = head;
     while (bantu) {
         if (bantu->data.id == ID) {
-            cout << "\nData ditemukan. Masukkan data baru:\n";
-            cout << "Nama   [" << bantu->data.nama << "]: ";
+            cout << "\nData ditemukan, masukkan data baru :\n";
+            cout << "Nama   [" << bantu->data.nama << "] : ";
             cin.getline(bantu->data.nama, sizeof(bantu->data.nama));
-            cout << "Harga  [" << bantu->data.harga << "]: ";
+            cout << "Harga  [" << bantu->data.harga << "] : ";
             cin >> bantu->data.harga;
-            cout << "Stok   [" << bantu->data.stok << "]: ";
+            cout << "Stok   [" << bantu->data.stok << "] : ";
             cin >> bantu->data.stok;
-            cout << "Genre  [" << bantu->data.genre << "]: ";
+            cout << "Genre  [" << bantu->data.genre << "] : ";
             cin >> bantu->data.genre;
 
             // simpan ulang semua ke file
@@ -217,7 +217,7 @@ void hapusGame() {
     }
 
     int ID;
-    cout << "\nMasukkan ID yang akan dihapus: ";
+    cout << "\nMasukkan ID yang akan dihapus : ";
     cin >> ID;
 
     Node* bantu = head;
@@ -226,18 +226,20 @@ void hapusGame() {
     }
 
     if (!bantu) {
-        cout << "\nData dengan ID " << ID << " tidak ditemukan.\n";
+        cout << "\nData dengan ID : " << ID << " tidak ditemukan.\n";
         return;
     }
 
-    // relink / sambungkan node
-    if (bantu->prev) {
+    // relink / sambungkan node kembali
+    if (bantu->prev) { // jika node yang dihapus bukan head
         bantu->prev->next = bantu->next;
-    } else {
+    } else {  // jika node yang dihapus adalah head
         head = bantu->next;
     }
-    if (bantu->next) {
+    if (bantu->next) { // jika node yang dihapus bukan terakhir 
         bantu->next->prev = bantu->prev;
+    } else { // jika node yang dihapus adalah terakhir
+        bantu->prev->next = nullptr;
     }
     delete bantu;
     cout << "\nData berhasil dihapus!\n";
