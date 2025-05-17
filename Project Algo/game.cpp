@@ -63,11 +63,36 @@ void simpanFile(const Game& g) {
     fclose(file);
 }
 
+void sortingGame() {
+    if (!head || !head->next) return; // Tidak perlu sorting jika list kosong atau hanya satu elemen
+
+    bool swapped; // untuk menandakan apakah ada pertukaran
+    do {
+        swapped = false; // Reset swapped flag
+        Node* bantu = head; // mulai dari head
+
+        while (bantu->next) { 
+            if (bantu->data.id > bantu->next->data.id) { // bandingkan ID
+                // Tukar data antara node saat ini dan node berikutnya
+                Game temp = bantu->data; // simpan data node saat ini ke temp
+                bantu->data = bantu->next->data; // Salin data node berikutnya ke node saat ini
+                bantu->next->data = temp; // salin data temp ke node berikutnya
+                
+                swapped = true; // tandakan bahwa ada pertukaran
+            }
+            bantu = bantu->next;
+        }
+    } while (swapped); // ulangi hingga tidak ada pertukaran
+}
+
+
 void tampilGame() {
     if (!head) {
         cout << "\nData kosong!\n";
         return;
     }
+
+    sortingGame(); 
 
     cout << "\nData Game:\n";
     cout << "--------------------------------------------------------------------------------\n";
