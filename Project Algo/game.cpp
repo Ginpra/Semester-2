@@ -30,7 +30,7 @@ void bacafile() {
     while (true) {
         Game g;
         if (fscanf(file, "%d", &g.id) != 1) break;
-        fscanf(file, " %99[^\n]", g.nama);
+        fscanf(file, " %99[^\n]", g.nama); // Baca nama hingga newline
         fscanf(file, "%f", &g.harga);
         fscanf(file, "%d", &g.stok);
         fscanf(file, " %19[^\n]", g.genre);
@@ -38,18 +38,20 @@ void bacafile() {
         // buat node baru
         Node* baru = new Node{g, nullptr, nullptr};
         if (!head) {
-            head = baru;
-        } else {
-            // sisip di belakang
+            head = baru; // Jika list masih kosong, node ini menjadi head
+        } else { // Jika list sudah ada, sisip di akhir (tail)
             Node* bantu = head;
-            while (bantu->next) bantu = bantu->next;
-            bantu->next = baru;
-            baru->prev = bantu;
+            while (bantu->next) {
+                bantu = bantu->next; // Cari node terakhir
+            }
+            bantu->next = baru; // Hubungkan node terakhir ke node baru
+            baru->prev = bantu; // Hubungkan node baru ke node terakhir
         }
     }
     fclose(file);
 }
 
+// Menyimpan satu data Game ke file (append)
 void simpanFile(const Game& g) {
     FILE* file = fopen("data_game.txt", "a");
     if (!file) {
@@ -83,7 +85,7 @@ void tampilGame() {
              << setw(15) << bantu->data.harga
              << setw(10) << bantu->data.stok
              << setw(15) << bantu->data.genre << "\n";
-        bantu = bantu->next;
+        bantu = bantu->next; // Pindah ke node berikutnya
     }
 }
 
@@ -120,7 +122,7 @@ void inputGame() {
         cout << "Masukkan Genre : ";
         cin >> g.genre;
 
-        // buat node baru dan sisip di belakang
+        // buat node baru dan sisip di belakang / akhir list (tail)
         Node* baru = new Node{g, nullptr, nullptr};
         if (!head) {
             head = baru;
@@ -185,7 +187,7 @@ void editGame() {
             cout << "Genre  [" << bantu->data.genre << "] : ";
             cin >> bantu->data.genre;
 
-            // simpan ulang semua ke file
+            // Simpan ulang seluruh linked list ke file (overwrite)
             FILE* file = fopen("data_game.txt", "w");
 
             if (!file) {
@@ -238,8 +240,8 @@ void hapusGame() {
     }
     if (bantu->next) { // jika node yang dihapus bukan terakhir 
         bantu->next->prev = bantu->prev;
-    } else { // jika node yang dihapus adalah terakhir
-        bantu->prev->next = nullptr;
+    } else { // jika node yang dihapus adalah terakhir / tail biasanya
+        bantu->prev->next = nullptr; //tidak pakai ini juga bisa 
     }
     delete bantu;
     cout << "\nData berhasil dihapus!\n";
